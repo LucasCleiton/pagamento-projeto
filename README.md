@@ -15,7 +15,6 @@ A arquitetura é composta por um frontend estático, um backend simples que serv
 **Fluxo de Dados:**
 `Usuário no Navegador` → `Seleciona um Plano` → `Frontend pede ao Backend` → `Backend cria Preferência na API do MP` → `Backend retorna ID da Preferência` → `Frontend renderiza o botão de Pagar` → `Usuário paga no MP` → `MP redireciona para página de status`.
 
-![Arquitetura do Projeto](https://i.imgur.com/eBvOaGu.png)
 
 ### Componentes:
 
