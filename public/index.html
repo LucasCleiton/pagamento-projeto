@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escolha seu Plano</title>
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+            flex-direction: column;
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+            text-align: center;
+        }
+
+        .produto {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .produto h3 {
+            color: #009ee3;
+        }
+
+        .wallet-container {
+            margin-top: 20px;
+            min-height: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Nossos Produtos</h1>
+
+    <div class="container">
+        <div class="produto">
+            <h3>Plano Básico</h3>
+            <h2>R$ 15,00</h2>
+            <div class="wallet-container" id="plano-basico-btn"></div>
+        </div>
+
+        <div class="produto">
+            <h3>Plano Pro</h3>
+            <h2>R$ 30,00</h2>
+            <div class="wallet-container" id="plano-pro-btn"></div>
+        </div>
+
+        <div class="produto">
+            <h3>Plano Premium</h3>
+            <h2>R$ 60,00</h2>
+            <div class="wallet-container" id="plano-premium-btn"></div>
+        </div>
+    </div>
+
+    <script>
+        // Sua Public Key
+        const mp = new MercadoPago('Sua public key');
+
+        // Função genérica para criar a preferência e renderizar o botão
+        async function gerarBotaoDePagamento(produtoInfo) {
+            try {
+                const response = await fetch("/create_preference", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        title: produtoInfo.title,
+                        unit_price: produtoInfo.price,
+                        quantity: 1
+                    }),
+                });
+
+                const preference = await response.json();
+
+                // Renderiza o botão no container correto
+                mp.bricks().create("wallet", produtoInfo.containerId, {
+                    initialization: {
+                        preferenceId: preference.id,
+                    },
+                    customization: {
+                        texts: { valueProp: 'smart_option' },
+                    }
+                });
+            } catch (error) {
+                console.error(`Erro ao gerar botão para ${produtoInfo.title}:`, error);
+                alert(`Não foi possível carregar o botão de pagamento para o ${produtoInfo.title}.`);
+            }
+        }
+
+        // --- Inicia o processo para cada plano assim que a página carrega ---
+
+        // 1. Gera o botão para o Plano Básico
+        gerarBotaoDePagamento({
+            title: "Plano Básico",
+            price: 15.00,
+            containerId: "plano-basico-btn" // O ID do container do botão
+        });
+
+        // 2. Gera o botão para o Plano Pro
+        gerarBotaoDePagamento({
+            title: "Plano Pro",
+            price: 30.00,
+            containerId: "plano-pro-btn"
+        });
+
+        // 3. Gera o botão para o Plano Premium
+        gerarBotaoDePagamento({
+            title: "Plano Premium",
+            price: 60.00,
+            containerId: "plano-premium-btn"
+        });
+
+    </script>
+</body>
+
+</html>
