@@ -6,39 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Escolha seu Plano</title>
     <script src="https://sdk.mercadopago.com/js/v2"></script>
-    <style>
-        body {
-            font-family: sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-color: #f0f0f0;
-            flex-direction: column;
-        }
-
-        .container {
-            display: flex;
-            gap: 20px;
-            text-align: center;
-        }
-
-        .produto {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .produto h3 {
-            color: #009ee3;
-        }
-
-        .wallet-container {
-            margin-top: 20px;
-            min-height: 50px;
-        }
-    </style>
+    <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
@@ -66,7 +34,7 @@
 
     <script>
         // Sua Public Key
-        const mp = new MercadoPago('Sua public key');
+        const mp = new MercadoPago(' Sua Public Key');
 
         // Função genérica para criar a preferência e renderizar o botão
         async function gerarBotaoDePagamento(produtoInfo) {

@@ -1,14 +1,20 @@
-// server.js
+// server.js (VERSÃO FINAL COM NGROK)
 
 import express from 'express';
 import { MercadoPagoConfig, Preference } from 'mercadopago';
 import path from 'path';
 
 // Cole seu Access Token aqui
-const accessToken = "//Cole seu Acess Token Aqui";
+const accessToken = "Cole seu Access Token aqui";
 
 const app = express();
 const port = 3000;
+
+
+// COLE A URL HTTPS DO NGROK 
+const host = "COLE A URL HTTPS DO NGROK ";
+
+
 
 // Configura o cliente do Mercado Pago com seu Access Token
 const client = new MercadoPagoConfig({ accessToken: accessToken });
@@ -38,9 +44,9 @@ app.post("/create_preference", async (req, res) => {
                 },
             ],
             back_urls: {
-                success: "http://localhost:3000/sucesso.html", // Página de sucesso
-                failure: "http://localhost:3000/falha.html",   // Página de falha
-
+                success: `${host}/sucesso.html`,
+                failure: `${host}/falha.html`,
+                //pending: `${host}/sucesso.html`, 
             },
             auto_return: "approved",
         };
@@ -48,15 +54,15 @@ app.post("/create_preference", async (req, res) => {
         const preference = new Preference(client);
         const result = await preference.create({ body });
 
-        // Retorna o ID da preferência para o frontend
         res.json({ id: result.id });
 
     } catch (error) {
-        console.log(error);
+        console.log("ERRO AO CRIAR PREFERÊNCIA:", error.cause || error.message);
         res.status(500).json({ error: "Erro ao criar a preferência" });
     }
 });
 
 app.listen(port, () => {
     console.log(`Servidor rodando em http://localhost:${port}`);
+    console.log(`URL Pública (ngrok) para teste: ${host}`);
 });
